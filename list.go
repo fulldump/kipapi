@@ -1,8 +1,8 @@
 package kipapi
 
 import (
-	"fmt"
-	"reflect"
+	"encoding/json"
+	"strings"
 
 	"gopkg.in/mgo.v2/bson"
 
@@ -12,15 +12,28 @@ import (
 func list(k *Kipapi) func(c *golax.Context) {
 	return func(c *golax.Context) {
 
-		i := k.Dao.Create().Value
+		l := []interface{}{}
 
-		l := reflect.MakeSlice(reflect.SliceOf(reflect.TypeOf(i)), 0, 0).Interface()
+		fields := c.Request.URL.Query().Get("fields")
+		f := strings.Split(fields+",id", ",")
 
-		fmt.Printf("%#v \n", l)
+		iter := k.Dao.Find(bson.M{}).Iter()
 
-		k.Dao.Find(bson.M{}).All(&l)
+		tmp := k.Dao.Create().Value
+		for iter.Next(tmp) {
+			m := interface2map(tmp)
+			m = map_item_fields(m, f)
 
-		// json.NewEncoder(c.Response).Encode(l)
+			l = append(l, m)
+
+			tmp = k.Dao.Create().Value // Optional: ensure do not reuse previous values :)
+		}
+
+		if err := iter.Close(); err != nil {
+			return
+		}
+
+		json.NewEncoder(c.Response).Encode(l)
 
 	}
 }

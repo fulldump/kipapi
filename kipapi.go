@@ -1,6 +1,9 @@
 package kipapi
 
 import (
+	"encoding/json"
+	"strings"
+
 	"github.com/fulldump/golax"
 	"github.com/fulldump/kip"
 )
@@ -34,8 +37,21 @@ func New(pn *golax.Node, d *kip.Dao) *Kipapi {
 		Interceptor(newInterceptorId()).
 		Interceptor(newInterceptorItem(k)).
 		Method("GET", retrieve(k)).
-		Method("DELETE", delete(k)).
+		Method("DELETE", remove(k)).
 		Method("PATCH", update(k))
 
 	return k
+}
+
+func (k *Kipapi) Print(c *golax.Context, i *kip.Item) {
+
+	m := interface2map(i.Value)
+
+	for k, _ := range m {
+		if strings.HasPrefix(k, "__") {
+			delete(m, k)
+		}
+	}
+
+	json.NewEncoder(c.Response).Encode(m)
 }

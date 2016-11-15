@@ -6,7 +6,7 @@ import (
 	"github.com/fulldump/golax"
 )
 
-func delete(k *Kipapi) func(c *golax.Context) {
+func remove(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 

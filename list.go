@@ -12,12 +12,22 @@ import (
 func list(k *Kipapi) func(c *golax.Context) {
 	return func(c *golax.Context) {
 
+		d := &Context{
+			Filter: bson.M{},
+		}
+
+		if nil != k.HookList {
+			if k.HookList(d, c); nil != c.LastError {
+				return
+			}
+		}
+
 		l := []interface{}{}
 
 		fields := c.Request.URL.Query().Get("fields")
 		f := strings.Split(fields+",id", ",")
 
-		iter := k.Dao.Find(bson.M{}).Iter()
+		iter := k.Dao.Find(d.Filter).Iter()
 
 		tmp := k.Dao.Create().Value
 		for iter.Next(tmp) {

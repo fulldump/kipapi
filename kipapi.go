@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 
+	"gopkg.in/mgo.v2/bson"
+
 	"github.com/fulldump/golax"
 	"github.com/fulldump/kip"
 )
@@ -13,12 +15,17 @@ type Kipapi struct {
 	ParentNode     *golax.Node
 	CollectionNode *golax.Node
 	ItemNode       *golax.Node
+	HookList       func(d *Context, c *golax.Context)
 }
 
 type Patch struct {
 	Operation string      `json:"operation"`
 	Key       string      `json:"key"`
 	Value     interface{} `json:"value"`
+}
+
+type Context struct {
+	Filter bson.M
 }
 
 func New(pn *golax.Node, d *kip.Dao) *Kipapi {

@@ -10,7 +10,7 @@ func remove(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
-		i := getItem(c)
+		i := GetItem(c)
 
 		if err := i.Delete(); nil != err {
 			c.Error(http.StatusInternalServerError, "Unexpected error deleting object")

@@ -6,7 +6,7 @@ func retrieve(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
-		i := getItem(c)
+		i := GetItem(c)
 
 		k.Print(c, i)
 	}

@@ -11,12 +11,16 @@ func create(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
+		// TODO hook precreate
+
 		o := k.Dao.Create()
 
 		if err := json.NewDecoder(c.Request.Body).Decode(o.Value); nil != err {
 			c.Error(http.StatusBadRequest, "Body expected to be JSON: "+err.Error())
 			return
 		}
+
+		// TODO hook preinsert
 
 		if err := o.Save(); nil != err {
 			c.Error(http.StatusInternalServerError, "Unexpected error saving object")

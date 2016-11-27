@@ -21,7 +21,7 @@ func update(k *Kipapi) func(c *golax.Context) {
 
 		// TODO: Put here the HOOK !
 
-		i := getItem(c)
+		i := GetItem(c)
 		for _, p := range patches {
 			if patchErr := i.Patch(p); nil != patchErr {
 				c.Error(http.StatusBadRequest, patchErr.Error())

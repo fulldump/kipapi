@@ -16,7 +16,7 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 		},
 		Before: func(c *golax.Context) {
 
-			id := getId(c)
+			id := GetId(c)
 
 			item := k.Dao.FindById(id)
 
@@ -31,7 +31,7 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 
 }
 
-func getItem(c *golax.Context) *kip.Item {
+func GetItem(c *golax.Context) *kip.Item {
 	object, exists := c.Get("kipapi_item")
 
 	if exists {

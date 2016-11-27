@@ -27,12 +27,11 @@ func newInterceptorId() *golax.Interceptor {
 	}
 }
 
-func getId(c *golax.Context) *bson.ObjectId {
+func GetId(c *golax.Context) *bson.ObjectId {
 	object_id, exists := c.Get("object_id")
 
 	if !exists {
-		c.Error(http.StatusInternalServerError, "Something went terribly wrong getting object_id")
-		return nil // panic?
+		return nil
 	}
 
 	return object_id.(*bson.ObjectId)

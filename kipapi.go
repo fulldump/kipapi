@@ -18,12 +18,6 @@ type Kipapi struct {
 	HookList       func(d *Context, c *golax.Context)
 }
 
-type Patch struct {
-	Operation string      `json:"operation"`
-	Key       string      `json:"key"`
-	Value     interface{} `json:"value"`
-}
-
 type Context struct {
 	Filter bson.M
 }

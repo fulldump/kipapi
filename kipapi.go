@@ -16,10 +16,14 @@ type Kipapi struct {
 	CollectionNode *golax.Node
 	ItemNode       *golax.Node
 	HookList       func(d *Context, c *golax.Context)
+	HookPatch      func(d *Context, c *golax.Context)
+	HookPatchItem  func(d *Context, c *golax.Context)
 }
 
 type Context struct {
-	Filter bson.M
+	Filter  bson.M
+	Patches []*kip.Patch
+	Patch   *kip.Patch
 }
 
 func New(pn *golax.Node, d *kip.Dao) *Kipapi {

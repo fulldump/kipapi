@@ -20,7 +20,7 @@ func (w *World) Test_Create_OK(c *C) {
 	// Check
 	body := *r.BodyJsonMap()
 	expected := map[string]interface{}{
-		"id":     body["id"],
+		"_id":    body["_id"],
 		"name":   "fulanito",
 		"email":  "",
 		"age":    json.Number("18"),

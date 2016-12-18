@@ -22,7 +22,7 @@ func (w *World) Test_Retrieve_OK(c *C) {
 	// Check
 	body := *r.BodyJsonMap()
 	expected := map[string]interface{}{
-		"id":     id,
+		"_id":    id,
 		"name":   "unnamed",
 		"email":  "",
 		"age":    json.Number("18"),

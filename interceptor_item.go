@@ -3,6 +3,8 @@ package kipapi
 import (
 	"net/http"
 
+	"gopkg.in/mgo.v2/bson"
+
 	"github.com/fulldump/golax"
 	"github.com/fulldump/kip"
 )
@@ -18,7 +20,19 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 
 			id := GetId(c)
 
-			item := k.Dao.FindById(id)
+			d := &Context{
+				Filter: bson.M{
+					"_id": id,
+				},
+			}
+
+			if nil != k.HookFilter {
+				if k.HookFilter(d, c); nil != c.LastError {
+					return
+				}
+			}
+
+			item := k.Dao.FindOne(d.Filter)
 
 			if nil == item {
 				c.Error(http.StatusNotFound, `Item '`+id.Hex()+`' not found.`)

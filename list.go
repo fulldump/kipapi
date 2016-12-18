@@ -16,6 +16,12 @@ func list(k *Kipapi) func(c *golax.Context) {
 			Filter: bson.M{},
 		}
 
+		if nil != k.HookFilter {
+			if k.HookFilter(d, c); nil != c.LastError {
+				return
+			}
+		}
+
 		if nil != k.HookList {
 			if k.HookList(d, c); nil != c.LastError {
 				return

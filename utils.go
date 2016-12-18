@@ -7,7 +7,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func interface2map(i interface{}) map[string]interface{} {
+func interface_to_map(i interface{}) map[string]interface{} {
 
 	t, marshal_err := json.Marshal(i)
 	if nil != marshal_err {
@@ -30,11 +30,6 @@ func map_item_fields(d bson.M, f []string) bson.M {
 	all := wordInArray("*", f)
 
 	for k, _ := range d {
-		if "_id" == k {
-			r["id"] = d["_id"]
-			continue
-		}
-
 		if strings.HasPrefix(k, "__") {
 			continue
 		}

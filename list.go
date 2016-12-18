@@ -31,18 +31,18 @@ func list(k *Kipapi) func(c *golax.Context) {
 		l := []interface{}{}
 
 		fields := c.Request.URL.Query().Get("fields")
-		f := strings.Split(fields+",id", ",")
+		f := strings.Split(fields+",_id", ",")
 
 		iter := k.Dao.Find(d.Filter).Iter()
 
-		tmp := k.Dao.Create().Value
-		for iter.Next(tmp) {
-			m := interface2map(tmp)
+		i := k.Dao.Create()
+		for iter.Next(i.Value) {
+			m := k.Map(i, c)
 			m = map_item_fields(m, f)
 
 			l = append(l, m)
 
-			tmp = k.Dao.Create().Value // Optional: ensure do not reuse previous values :)
+			i = k.Dao.Create() // Optional: ensure do not reuse previous values :)
 		}
 
 		if err := iter.Close(); err != nil {

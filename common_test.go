@@ -12,7 +12,7 @@ func random_with_prefix(prefix string) string {
 }
 
 type User struct {
-	Id     bson.ObjectId `bson:"_id"    json:"id"`
+	Id     bson.ObjectId `bson:"_id"    json:"_id"`
 	Name   string        `bson:"name"   json:"name"`
 	Email  string        `bson:"email"  json:"email"`
 	Age    int           `bson:"age"    json:"age"`

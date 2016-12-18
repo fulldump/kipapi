@@ -16,13 +16,15 @@ import (
 func Test(t *testing.T) { TestingT(t) }
 
 type World struct {
-	MongoUri string
-	Api      *golax.Api
-	Apitest  *apitest.Apitest
-	Database *kip.Database
-	Kip      *kip.Kip
-	Users    *kip.Dao
-	Books    *kip.Dao
+	MongoUri    string
+	Api         *golax.Api
+	Apitest     *apitest.Apitest
+	Database    *kip.Database
+	Kip         *kip.Kip
+	KipapiUsers *Kipapi
+	KipapiBooks *Kipapi
+	Users       *kip.Dao
+	Books       *kip.Dao
 }
 
 var _ = Suite(&World{
@@ -71,8 +73,8 @@ func (w *World) SetUpTest(c *C) {
 
 	// Build api
 	w.Api = golax.NewApi()
-	New(w.Api.Root, w.Users)
-	New(w.Api.Root, w.Books)
+	w.KipapiUsers = New(w.Api.Root, w.Users)
+	w.KipapiBooks = New(w.Api.Root, w.Books)
 
 	w.Apitest = apitest.New(w.Api)
 }

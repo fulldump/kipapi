@@ -1,4 +1,5 @@
-# kipapi
+<img src="logo.png">
+
 
 <p align="center">
 <a href="https://travis-ci.org/fulldump/kipapi"><img src="https://travis-ci.org/fulldump/kipapi.svg?branch=master"></a>

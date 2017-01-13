@@ -20,6 +20,7 @@ type Kipapi struct {
 	HookPrint      func(d *Context, c *golax.Context)
 	HookPatch      func(d *Context, c *golax.Context)
 	HookPatchItem  func(d *Context, c *golax.Context)
+	HookInsert     func(d *Context, c *golax.Context)
 }
 
 type Context struct {

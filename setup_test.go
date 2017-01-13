@@ -8,7 +8,7 @@ import (
 	"github.com/fulldump/kip"
 
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2"
+	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -85,4 +85,10 @@ func (w *World) TearDownSuite(c *C) {
 	session.SetMode(mgo.Monotonic, true)
 	session.DB("").DropDatabase()
 	session.Close()
+}
+
+// Check world constraints
+func (w *World) Test_World_NoUsers(c *C) {
+	n, _ := w.KipapiUsers.Dao.Find(nil).Count()
+	c.Assert(n, Equals, 0)
 }

@@ -34,8 +34,7 @@ func create(k *Kipapi) func(c *golax.Context) {
 
 		c.Response.WriteHeader(http.StatusCreated)
 
-		// TODO: Print item in the canonical way `k.PrintItem(i, c)`
-		json.NewEncoder(c.Response).Encode(d.Item.Value)
+		k.PrintItem(d.Item, c)
 
 	}
 }

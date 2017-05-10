@@ -56,3 +56,58 @@ func (w *World) Test_Filter(c *C) {
 	c.Assert(user.Value.(*User).Name, Equals, "·-{fulanito}-·")
 	c.Assert(user.Value.(*User).Email, Equals, "myemail@google.com")
 }
+
+func (w *World) Test_Filter_List(c *C) {
+	// Create John
+	john_item := w.Users.Create()
+	john := john_item.Value.(*User)
+	john.Name = "John"
+	john_item.Save()
+
+	// Create Mary
+	mary_item := w.Users.Create()
+	mary := mary_item.Value.(*User)
+	mary.Name = "Mary"
+	mary_item.Save()
+
+	// Hooks
+	w.KipapiUsers.HookFilter = func(d *Context, c *golax.Context) {
+		d.Filter["name"] = bson.RegEx{Pattern: "M"}
+	}
+
+	// Request set name
+	r := w.Apitest.Request("GET", "/users/").Do()
+
+	// Check
+	c.Assert(r.StatusCode, Equals, http.StatusOK)
+
+	body := r.BodyJson().([]interface{})
+	c.Assert(len(body), Equals, 1)
+
+	user := body[0].(map[string]interface{})
+	c.Assert(user["_id"], DeepEquals, mary.Id.Hex())
+
+}
+
+func (w *World) Test_Filter_Item(c *C) {
+	// Create John
+	john_item := w.Users.Create()
+	john := john_item.Value.(*User)
+	john.Name = "John"
+	john_item.Save()
+
+	// Hooks
+	w.KipapiUsers.HookFilter = func(d *Context, c *golax.Context) {
+		d.Filter["name"] = bson.RegEx{Pattern: "M"}
+	}
+
+	// Request set name
+	r := w.Apitest.Request("GET", "/users/"+john.Id.Hex()).Do()
+
+	// Check
+	c.Assert(r.StatusCode, Equals, http.StatusNotFound)
+
+	body := r.BodyString()
+	c.Assert(body, Equals, "")
+
+}

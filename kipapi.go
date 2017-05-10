@@ -15,12 +15,18 @@ type Kipapi struct {
 	ParentNode     *golax.Node
 	CollectionNode *golax.Node
 	ItemNode       *golax.Node
-	HookFilter     func(d *Context, c *golax.Context)
-	HookList       func(d *Context, c *golax.Context)
-	HookPrint      func(d *Context, c *golax.Context)
-	HookPatch      func(d *Context, c *golax.Context)
-	HookPatchItem  func(d *Context, c *golax.Context)
-	HookInsert     func(d *Context, c *golax.Context)
+
+	HookCreate    func(c *golax.Context)
+	HookDelete    func(id *bson.ObjectId, c *golax.Context)
+	HookFilter    func(d *Context, c *golax.Context)
+	HookInsert    func(d *Context, c *golax.Context)
+	HookList      func(c *golax.Context)
+	HookListItem  func(d *kip.Item, c *golax.Context) *kip.Item
+	HookPrint     func(d *Context, c *golax.Context)
+	HookPatch     func(d *Context, c *golax.Context)
+	HookPatchItem func(d *Context, c *golax.Context)
+	HookRetrieve  func(id *bson.ObjectId, c *golax.Context)
+	HookUpdate    func(id *bson.ObjectId, c *golax.Context)
 }
 
 type Context struct {

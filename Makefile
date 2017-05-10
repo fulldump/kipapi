@@ -25,7 +25,7 @@ setup:
 
 .PHONY: test
 test:
-	$(GOCMD) test $(PROJECT)
+	$(GOCMD) test $(PROJECT) -cover
 
 .PHONY: coverage
 coverage:

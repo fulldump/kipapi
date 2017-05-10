@@ -30,3 +30,17 @@ func (w *World) Test_Create_OK(c *C) {
 	c.Assert(body, DeepEquals, expected)
 	c.Assert(r.StatusCode, Equals, http.StatusCreated)
 }
+
+func (w *World) Test_Create_MalformedBody(c *C) {
+
+	// Request create
+	r := w.Apitest.Request("POST", "/users/").
+		WithBodyString(`}`).
+		Do()
+
+	// Check
+	c.Assert(r.StatusCode, Equals, http.StatusBadRequest)
+
+	body := r.BodyString()
+	c.Assert(body, DeepEquals, "")
+}

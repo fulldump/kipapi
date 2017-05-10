@@ -34,6 +34,25 @@ func (w *World) Test_Update_OK(c *C) {
 	c.Assert(user.Value.(*User).Name, Equals, "Fulanito")
 }
 
+func (w *World) Test_Update_BadRequest(c *C) {
+	// Create John
+	john := w.Users.Create()
+	john.Save()
+
+	id := john.GetId().(bson.ObjectId)
+
+	// Request set name
+	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+		WithBodyString(`}`).
+		Do()
+
+	// Check
+	c.Assert(r.StatusCode, Equals, http.StatusBadRequest)
+
+	body := r.BodyString()
+	c.Assert(body, Equals, "")
+}
+
 func (w *World) Test_Update_HookPatch(c *C) {
 	// Create John
 	john := w.Users.Create()
@@ -65,36 +84,31 @@ func (w *World) Test_Update_HookPatch(c *C) {
 	c.Assert(user.Value.(*User).Name, Equals, "FULANITO")
 }
 
-func (w *World) Test_Update_HookPatchItem(c *C) {
+func (w *World) Test_Update_BadPatch(c *C) {
 	// Create John
 	john := w.Users.Create()
 	john.Save()
 
 	id := john.GetId().(bson.ObjectId)
 
-	// Hook
-	w.KipapiUsers.HookPatchItem = func(d *Context, c *golax.Context) {
-		p := d.Patch
-		if "set" == p.Operation && "name" == p.Key {
-			p.Value = strings.ToLower(p.Value.(string))
-		}
-	}
+	// Add interceptor to print api error:
+	w.Api.Root.Interceptor(golax.InterceptorError)
 
 	// Request set name
 	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
 		WithBodyString(`[
 			{
-				"operation": "set",
+				"operation": "seta",
 				"key": "name",
 				"value": "FUlaniTo"
 			}
 		]`).Do()
 
 	// Check
-	c.Assert(r.StatusCode, Equals, http.StatusNoContent)
+	c.Assert(r.StatusCode, Equals, http.StatusBadRequest)
 
-	user := w.Users.FindById(id)
-	c.Assert(user.Value.(*User).Name, Equals, "fulanito")
+	body := r.BodyJsonMap()
+	c.Assert((*body)["Description"], DeepEquals, "invalid operation")
 }
 
 func (w *World) Test_Update_HookPatchCombined(c *C) {

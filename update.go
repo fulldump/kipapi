@@ -12,6 +12,13 @@ func update(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
+		if nil != k.HookUpdate {
+			id := GetId(c)
+			if k.HookUpdate(id, c); nil != c.LastError {
+				return
+			}
+		}
+
 		d := &Context{
 			Patches: []*kip.Patch{},
 		}

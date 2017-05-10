@@ -11,7 +11,11 @@ func create(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
-		// TODO hook precreate
+		if nil != k.HookCreate {
+			if k.HookCreate(c); nil != c.LastError {
+				return
+			}
+		}
 
 		d := &Context{
 			Item: k.Dao.Create(),

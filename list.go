@@ -12,18 +12,18 @@ import (
 func list(k *Kipapi) func(c *golax.Context) {
 	return func(c *golax.Context) {
 
+		if nil != k.HookList {
+			if k.HookList(c); nil != c.LastError {
+				return
+			}
+		}
+
 		d := &Context{
 			Filter: bson.M{},
 		}
 
 		if nil != k.HookFilter {
 			if k.HookFilter(d, c); nil != c.LastError {
-				return
-			}
-		}
-
-		if nil != k.HookList {
-			if k.HookList(d, c); nil != c.LastError {
 				return
 			}
 		}
@@ -37,6 +37,18 @@ func list(k *Kipapi) func(c *golax.Context) {
 
 		i := k.Dao.Create()
 		for iter.Next(i.Value) {
+
+			if nil != k.HookListItem {
+				j := k.HookListItem(i, c)
+				if nil != c.LastError {
+					return
+				}
+				if nil == j {
+					continue
+				}
+				i = j
+			}
+
 			m := k.Map(i, c)
 			m = map_item_fields(m, f)
 

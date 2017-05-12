@@ -34,6 +34,7 @@ func create(k *Kipapi) func(c *golax.Context) {
 
 		if err := d.Item.Save(); nil != err {
 			c.Error(http.StatusInternalServerError, "Unexpected error saving object")
+			return
 		}
 
 		c.Response.WriteHeader(http.StatusCreated)

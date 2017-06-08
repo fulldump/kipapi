@@ -12,14 +12,14 @@ import (
 func list(k *Kipapi) func(c *golax.Context) {
 	return func(c *golax.Context) {
 
-		if nil != k.HookList {
-			if k.HookList(c); nil != c.LastError {
-				return
-			}
-		}
-
 		d := &Context{
 			Filter: bson.M{},
+		}
+
+		if nil != k.HookList {
+			if k.HookList(d, c); nil != c.LastError {
+				return
+			}
 		}
 
 		if nil != k.HookFilter {

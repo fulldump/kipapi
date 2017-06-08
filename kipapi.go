@@ -20,7 +20,7 @@ type Kipapi struct {
 	HookDelete    func(id *bson.ObjectId, c *golax.Context)
 	HookFilter    func(d *Context, c *golax.Context)
 	HookInsert    func(d *Context, c *golax.Context)
-	HookList      func(c *golax.Context)
+	HookList      func(d *Context, c *golax.Context)
 	HookListItem  func(d *kip.Item, c *golax.Context) *kip.Item
 	HookPrint     func(d *Context, c *golax.Context)
 	HookPatch     func(d *Context, c *golax.Context)

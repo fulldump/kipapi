@@ -11,7 +11,7 @@ func (w *World) Test_HookList(c *C) {
 	john.Save()
 
 	// Hooks
-	w.KipapiUsers.HookList = func(c *golax.Context) {
+	w.KipapiUsers.HookList = func(d *Context, c *golax.Context) {
 		c.Error(999, "Not authorized to list :_(")
 	}
 

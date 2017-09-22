@@ -8,6 +8,7 @@ import (
 
 	. "gopkg.in/check.v1"
 	"gopkg.in/mgo.v2/bson"
+	"fmt"
 )
 
 func (w *World) Test_Filter(c *C) {
@@ -15,7 +16,7 @@ func (w *World) Test_Filter(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Hooks
 	w.KipapiUsers.HookPatch = func(d *Context, c *golax.Context) {
@@ -34,7 +35,7 @@ func (w *World) Test_Filter(c *C) {
 	}
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+	r := w.Apitest.Request("PATCH", fmt.Sprintf("/users/%s",id)).
 		WithBodyString(`[
 			{
 				"operation": "set",
@@ -85,7 +86,7 @@ func (w *World) Test_Filter_List(c *C) {
 	c.Assert(len(body), Equals, 1)
 
 	user := body[0].(map[string]interface{})
-	c.Assert(user["_id"], DeepEquals, mary.Id.Hex())
+	c.Assert(user["_id"], DeepEquals, mary.Id)
 
 }
 
@@ -102,7 +103,7 @@ func (w *World) Test_Filter_Item(c *C) {
 	}
 
 	// Request set name
-	r := w.Apitest.Request("GET", "/users/"+john.Id.Hex()).Do()
+	r := w.Apitest.Request("GET", "/users/"+john.Id).Do()
 
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusNotFound)

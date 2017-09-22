@@ -3,7 +3,6 @@ package kipapi
 import (
 	"github.com/fulldump/golax"
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2/bson"
 )
 
 func (w *World) Test_HookUpdate(c *C) {
@@ -15,12 +14,12 @@ func (w *World) Test_HookUpdate(c *C) {
 	john_item.Save()
 
 	// Hooks
-	w.KipapiUsers.HookUpdate = func(id *bson.ObjectId, c *golax.Context) {
+	w.KipapiUsers.HookUpdate = func(d *Context, c *golax.Context) {
 		c.Error(999, "Not allowed to update D:")
 	}
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+john.Id.Hex()).
+	r := w.Apitest.Request("PATCH", "/users/"+john.Id).
 		WithBodyString(`
 			[
 				{"operation": "set", "key":"name", "value": "Jonny"}

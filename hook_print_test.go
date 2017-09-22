@@ -18,15 +18,15 @@ func (w *World) Test_HookPrint(c *C) {
 	// Hooks
 	w.KipapiUsers.HookPrint = func(d *Context, c *golax.Context) {
 		d.Printed = map[string]interface{}{
-			"id": "This is the id: " + d.Item.Value.(*User).Id.Hex(),
+			"id": "This is the id: " + d.Item.Value.(*User).Id,
 		}
 	}
 
 	// Request set name
-	r := w.Apitest.Request("GET", "/users/"+john.Id.Hex()).Do()
+	r := w.Apitest.Request("GET", "/users/"+john.Id).Do()
 
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusOK)
 
-	c.Assert(r.BodyString(), Equals, `{"id":"This is the id: `+john.Id.Hex()+`"}`+"\n")
+	c.Assert(r.BodyString(), Equals, `{"id":"This is the id: `+john.Id+`"}`+"\n")
 }

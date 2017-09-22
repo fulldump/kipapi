@@ -44,7 +44,7 @@ func (w *World) SetUpSuite(c *C) {
 		Name: "users",
 		OnCreate: func() interface{} {
 			return &User{
-				Id:   bson.NewObjectId(),
+				Id:   bson.NewObjectId().Hex(),
 				Name: "unnamed",
 				Age:  18,
 			}

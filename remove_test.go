@@ -3,8 +3,9 @@ package kipapi
 import (
 	"net/http"
 
+	"fmt"
+
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2/bson"
 )
 
 func (w *World) Test_Delete_OK(c *C) {
@@ -13,10 +14,10 @@ func (w *World) Test_Delete_OK(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Request John
-	r := w.Apitest.Request("DELETE", "/users/"+id.Hex()).Do()
+	r := w.Apitest.Request("DELETE", fmt.Sprintf("/users/%s", id)).Do()
 
 	// Check request
 	c.Assert(r.StatusCode, Equals, http.StatusNoContent)

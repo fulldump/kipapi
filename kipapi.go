@@ -17,7 +17,7 @@ type Kipapi struct {
 	ItemNode       *golax.Node
 
 	HookCreate    func(c *golax.Context)
-	HookDelete    func(id *bson.ObjectId, c *golax.Context)
+	HookDelete    func(d *Context, c *golax.Context)
 	HookFilter    func(d *Context, c *golax.Context)
 	HookInsert    func(d *Context, c *golax.Context)
 	HookList      func(d *Context, c *golax.Context)
@@ -25,8 +25,8 @@ type Kipapi struct {
 	HookPrint     func(d *Context, c *golax.Context)
 	HookPatch     func(d *Context, c *golax.Context)
 	HookPatchItem func(d *Context, c *golax.Context)
-	HookRetrieve  func(id *bson.ObjectId, c *golax.Context)
-	HookUpdate    func(id *bson.ObjectId, c *golax.Context)
+	HookRetrieve  func(d *Context, c *golax.Context)
+	HookUpdate    func(d *Context, c *golax.Context)
 	//HookId func (d *Context, c *golax.Context)
 }
 
@@ -117,7 +117,6 @@ func New(pn *golax.Node, d *kip.Dao) *Kipapi {
 
 	k.ItemNode = k.CollectionNode.
 		Node("{id}").
-		Interceptor(newInterceptorId()).
 		Interceptor(newInterceptorItem(k)).
 		Method("GET", retrieve(k), golax.Doc{
 			Name: `Retrieve item`,

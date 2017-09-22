@@ -35,10 +35,10 @@ func (w *World) Test_List_SeveralItems(c *C) {
 
 	expected_body := []interface{}{
 		map[string]interface{}{
-			"_id": value1.Id.Hex(),
+			"_id": value1.Id,
 		},
 		map[string]interface{}{
-			"_id": value2.Id.Hex(),
+			"_id": value2.Id,
 		},
 	}
 

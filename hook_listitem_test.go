@@ -38,7 +38,7 @@ func (w *World) Test_HookListItem_RemoveItem(c *C) {
 	c.Assert(len(body), Equals, 1)
 
 	user := body[0].(map[string]interface{})
-	c.Assert(user["_id"], DeepEquals, john.Id.Hex())
+	c.Assert(user["_id"], DeepEquals, john.Id)
 }
 
 func (w *World) Test_HookListItem_Error(c *C) {

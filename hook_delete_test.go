@@ -1,9 +1,10 @@
 package kipapi
 
 import (
+	"fmt"
+
 	"github.com/fulldump/golax"
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2/bson"
 )
 
 func (w *World) Test_HookDelete(c *C) {
@@ -11,15 +12,15 @@ func (w *World) Test_HookDelete(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Hooks
-	w.KipapiUsers.HookDelete = func(id *bson.ObjectId, c *golax.Context) {
+	w.KipapiUsers.HookDelete = func(d *Context, c *golax.Context) {
 		c.Error(999, "Not authorized to do this :_(")
 	}
 
 	// Request set name
-	r := w.Apitest.Request("DELETE", "/users/"+id.Hex()).Do()
+	r := w.Apitest.Request("DELETE", fmt.Sprintf("/users/%s", id)).Do()
 
 	// Check
 	c.Assert(r.StatusCode, Equals, 999)

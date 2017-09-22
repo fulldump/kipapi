@@ -3,7 +3,6 @@ package kipapi
 import (
 	"github.com/fulldump/golax"
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2/bson"
 )
 
 func (w *World) Test_HookRetrieve(c *C) {
@@ -15,12 +14,12 @@ func (w *World) Test_HookRetrieve(c *C) {
 	john_item.Save()
 
 	// Hooks
-	w.KipapiUsers.HookRetrieve = func(id *bson.ObjectId, c *golax.Context) {
+	w.KipapiUsers.HookRetrieve = func(d *Context, c *golax.Context) {
 		c.Error(999, "Not allowed to create :D")
 	}
 
 	// Request set name
-	r := w.Apitest.Request("GET", "/users/"+john.Id.Hex()).Do()
+	r := w.Apitest.Request("GET", "/users/"+john.Id).Do()
 
 	// Check
 	c.Assert(r.StatusCode, Equals, 999)

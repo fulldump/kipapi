@@ -7,6 +7,7 @@ import (
 
 	"github.com/fulldump/golax"
 	"github.com/fulldump/kip"
+	"fmt"
 )
 
 func newInterceptorItem(k *Kipapi) *golax.Interceptor {
@@ -18,7 +19,7 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 		},
 		Before: func(c *golax.Context) {
 
-			id := GetId(c)
+			id := c.Parameter
 
 			d := &Context{
 				Filter: bson.M{
@@ -35,7 +36,8 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 			item := k.Dao.FindOne(d.Filter)
 
 			if nil == item {
-				c.Error(http.StatusNotFound, `Item '`+id.Hex()+`' not found.`)
+				m := fmt.Sprintf("Item `%s` not found", id)
+				c.Error(http.StatusNotFound, m)
 				return
 			}
 

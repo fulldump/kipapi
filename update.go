@@ -12,17 +12,17 @@ func update(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
+		d := &Context{
+			Item: GetItem(c),
+		}
+
 		if nil != k.HookUpdate {
-			id := GetId(c)
-			if k.HookUpdate(id, c); nil != c.LastError {
+			if k.HookUpdate(d, c); nil != c.LastError {
 				return
 			}
 		}
 
-		d := &Context{
-			Patches: []*kip.Patch{},
-		}
-
+		d.Patches = []*kip.Patch{}
 		err := json.NewDecoder(c.Request.Body).Decode(&d.Patches)
 		if nil != err {
 			c.Error(http.StatusBadRequest, "Body should be a valid JSON array of patches")
@@ -35,7 +35,7 @@ func update(k *Kipapi) func(c *golax.Context) {
 			}
 		}
 
-		i := GetItem(c)
+		i := d.Item
 		for _, d.Patch = range d.Patches {
 
 			if nil != k.HookPatchItem {

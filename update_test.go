@@ -6,8 +6,9 @@ import (
 
 	"github.com/fulldump/golax"
 
+	"fmt"
+
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2/bson"
 )
 
 func (w *World) Test_Update_OK(c *C) {
@@ -15,10 +16,10 @@ func (w *World) Test_Update_OK(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+	r := w.Apitest.Request("PATCH", fmt.Sprintf("/users/%s", id)).
 		WithBodyString(`[
 			{
 				"operation": "set",
@@ -39,10 +40,10 @@ func (w *World) Test_Update_BadRequest(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+	r := w.Apitest.Request("PATCH", fmt.Sprintf("/users/%s", id)).
 		WithBodyString(`}`).
 		Do()
 
@@ -58,7 +59,7 @@ func (w *World) Test_Update_HookPatch(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Hook
 	w.KipapiUsers.HookPatch = func(d *Context, c *golax.Context) {
@@ -68,7 +69,7 @@ func (w *World) Test_Update_HookPatch(c *C) {
 	}
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+	r := w.Apitest.Request("PATCH", fmt.Sprintf("/users/%s", id)).
 		WithBodyString(`[
 			{
 				"operation": "set",
@@ -89,13 +90,13 @@ func (w *World) Test_Update_BadPatch(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Add interceptor to print api error:
 	w.Api.Root.Interceptor(golax.InterceptorError)
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+	r := w.Apitest.Request("PATCH", fmt.Sprintf("/users/%s", id)).
 		WithBodyString(`[
 			{
 				"operation": "seta",
@@ -116,7 +117,7 @@ func (w *World) Test_Update_HookPatchCombined(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId)
+	id := john.GetId()
 
 	// Hooks
 	w.KipapiUsers.HookPatch = func(d *Context, c *golax.Context) {
@@ -135,7 +136,7 @@ func (w *World) Test_Update_HookPatchCombined(c *C) {
 	}
 
 	// Request set name
-	r := w.Apitest.Request("PATCH", "/users/"+id.Hex()).
+	r := w.Apitest.Request("PATCH", fmt.Sprintf("/users/%s", id)).
 		WithBodyString(`[
 			{
 				"operation": "set",

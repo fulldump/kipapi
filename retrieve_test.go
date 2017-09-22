@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"fmt"
+
 	. "gopkg.in/check.v1"
-	"gopkg.in/mgo.v2/bson"
 )
 
 func (w *World) Test_Retrieve_OK(c *C) {
@@ -14,10 +15,10 @@ func (w *World) Test_Retrieve_OK(c *C) {
 	john := w.Users.Create()
 	john.Save()
 
-	id := john.GetId().(bson.ObjectId).Hex()
+	id := john.GetId()
 
 	// Request John
-	r := w.Apitest.Request("GET", "/users/"+id).Do()
+	r := w.Apitest.Request("GET", fmt.Sprintf("/users/%s", id)).Do()
 
 	// Check
 	body := *r.BodyJsonMap()
@@ -33,22 +34,12 @@ func (w *World) Test_Retrieve_OK(c *C) {
 	c.Assert(r.StatusCode, Equals, http.StatusOK)
 }
 
-func (w *World) Test_Retrieve_MalformedId(c *C) {
-
-	// Request John
-	r := w.Apitest.Request("GET", "/users/malformed_id").Do()
-
-	// Check
-	c.Assert(r.StatusCode, Equals, http.StatusBadRequest)
-	c.Assert(r.BodyString(), Equals, "")
-}
-
 func (w *World) Test_Retrieve_NotFound(c *C) {
 
-	id := bson.NewObjectId()
+	id := "invented-id"
 
 	// Request John
-	r := w.Apitest.Request("GET", "/users/"+id.Hex()).Do()
+	r := w.Apitest.Request("GET", "/users/"+id).Do()
 
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusNotFound)

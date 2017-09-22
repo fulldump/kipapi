@@ -51,7 +51,10 @@ func list(k *Kipapi) func(c *golax.Context) {
 			}
 
 			m := k.Map(i, c)
-			m = map_item_fields(m, f)
+
+			if fields != "" {
+				m = map_item_fields(m, f)
+			}
 
 			l = append(l, m)
 

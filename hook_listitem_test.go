@@ -20,12 +20,12 @@ func (w *World) Test_HookListItem_RemoveItem(c *C) {
 	mary_item.Save()
 
 	// Hooks
-	w.KipapiUsers.HookListItem = func(item *kip.Item, c *golax.Context) *kip.Item {
-		user := item.Value.(*User)
+	w.KipapiUsers.HookListItem = func(d *Context, c *golax.Context) *kip.Item {
+		user := d.Item.Value.(*User)
 		if "Mary" == user.Name {
 			return nil
 		}
-		return item
+		return d.Item
 	}
 
 	// Request set name
@@ -55,12 +55,12 @@ func (w *World) Test_HookListItem_Error(c *C) {
 	mary_item.Save()
 
 	// Hooks
-	w.KipapiUsers.HookListItem = func(item *kip.Item, c *golax.Context) *kip.Item {
-		user := item.Value.(*User)
+	w.KipapiUsers.HookListItem = func(d *Context, c *golax.Context) *kip.Item {
+		user := d.Item.Value.(*User)
 		if "Mary" == user.Name {
 			c.Error(999, "Error listing this file")
 		}
-		return item
+		return d.Item
 	}
 
 	// Request set name

@@ -39,7 +39,8 @@ func list(k *Kipapi) func(c *golax.Context) {
 		for iter.Next(i.Value) {
 
 			if nil != k.HookListItem {
-				j := k.HookListItem(i, c)
+				d.Item = i
+				j := k.HookListItem(d, c)
 				if nil != c.LastError {
 					return
 				}

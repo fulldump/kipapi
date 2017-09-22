@@ -23,6 +23,7 @@ type Kipapi struct {
 	HookList      func(d *Context, c *golax.Context)
 	HookListItem  func(d *Context, c *golax.Context) *kip.Item
 	HookPrint     func(d *Context, c *golax.Context)
+	HookPrintList func(d *Context, c *golax.Context) interface{}
 	HookPatch     func(d *Context, c *golax.Context)
 	HookPatchItem func(d *Context, c *golax.Context)
 	HookRetrieve  func(d *Context, c *golax.Context)
@@ -31,11 +32,12 @@ type Kipapi struct {
 }
 
 type Context struct {
-	Filter  bson.M
-	Item    *kip.Item
-	Printed map[string]interface{}
-	Patches []*kip.Patch
-	Patch   *kip.Patch
+	Filter      bson.M
+	Item        *kip.Item
+	Printed     map[string]interface{}
+	PrintedList []interface{}
+	Patches     []*kip.Patch
+	Patch       *kip.Patch
 }
 
 func New(pn *golax.Node, d *kip.Dao) *Kipapi {

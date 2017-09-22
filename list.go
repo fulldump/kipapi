@@ -65,7 +65,16 @@ func list(k *Kipapi) func(c *golax.Context) {
 			return
 		}
 
-		json.NewEncoder(c.Response).Encode(l)
+		var p interface{} = l
+
+		if nil != k.HookPrintList {
+			d.PrintedList = l
+			if p = k.HookPrintList(d, c); nil != c.LastError {
+				return
+			}
+		}
+
+		json.NewEncoder(c.Response).Encode(p)
 
 	}
 }

@@ -27,7 +27,7 @@ type Kipapi struct {
 	HookPatchItem func(d *Context, c *golax.Context)
 	HookRetrieve  func(d *Context, c *golax.Context)
 	HookUpdate    func(d *Context, c *golax.Context)
-	//HookId func (d *Context, c *golax.Context)
+	HookId        func(d *Context, c *golax.Context)
 }
 
 type Context struct {

@@ -26,6 +26,11 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 					"_id": id,
 				},
 			}
+			if nil != k.HookId {
+				if k.HookId(d,c); nil != c.LastError {
+					return
+				}
+			}
 
 			if nil != k.HookFilter {
 				if k.HookFilter(d, c); nil != c.LastError {

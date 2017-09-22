@@ -12,14 +12,14 @@ func create(k *Kipapi) func(c *golax.Context) {
 
 	return func(c *golax.Context) {
 
-		if nil != k.HookCreate {
-			if k.HookCreate(c); nil != c.LastError {
-				return
-			}
-		}
-
 		d := &Context{
 			Item: k.Dao.Create(),
+		}
+
+		if nil != k.HookCreate {
+			if k.HookCreate(d, c); nil != c.LastError {
+				return
+			}
 		}
 
 		if err := json.NewDecoder(c.Request.Body).Decode(d.Item.Value); nil != err {

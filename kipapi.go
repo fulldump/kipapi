@@ -16,7 +16,7 @@ type Kipapi struct {
 	CollectionNode *golax.Node
 	ItemNode       *golax.Node
 
-	HookCreate    func(c *golax.Context)
+	HookCreate    func(d *Context, c *golax.Context)
 	HookDelete    func(d *Context, c *golax.Context)
 	HookFilter    func(d *Context, c *golax.Context)
 	HookInsert    func(d *Context, c *golax.Context)

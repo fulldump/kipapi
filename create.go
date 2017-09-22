@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/fulldump/golax"
+	"gopkg.in/mgo.v2"
 )
 
 func create(k *Kipapi) func(c *golax.Context) {
@@ -33,6 +34,12 @@ func create(k *Kipapi) func(c *golax.Context) {
 		}
 
 		if err := d.Item.Save(); nil != err {
+
+			if mgo.IsDup(err) {
+				c.Error(http.StatusConflict, "Duplicated index: "+err.Error())
+				return
+			}
+
 			c.Error(http.StatusInternalServerError, "Unexpected error saving object")
 			return
 		}

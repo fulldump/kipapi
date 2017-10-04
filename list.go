@@ -1,7 +1,6 @@
 package kipapi
 
 import (
-	"encoding/json"
 	"strings"
 
 	"gopkg.in/mgo.v2/bson"
@@ -74,7 +73,7 @@ func list(k *Kipapi) func(c *golax.Context) {
 			}
 		}
 
-		json.NewEncoder(c.Response).Encode(p)
+		k.Encode(p, c)
 
 	}
 }

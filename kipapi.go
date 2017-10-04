@@ -1,7 +1,6 @@
 package kipapi
 
 import (
-	"encoding/json"
 	"strings"
 
 	"gopkg.in/mgo.v2/bson"
@@ -15,6 +14,7 @@ type Kipapi struct {
 	ParentNode     *golax.Node
 	CollectionNode *golax.Node
 	ItemNode       *golax.Node
+	Encode         func(i interface{}, c *golax.Context)
 
 	HookCreate    func(d *Context, c *golax.Context)
 	HookDelete    func(d *Context, c *golax.Context)
@@ -44,6 +44,7 @@ func New(pn *golax.Node, d *kip.Dao) *Kipapi {
 	k := &Kipapi{
 		Dao:        d,
 		ParentNode: pn,
+		Encode:     DefaultEncode,
 	}
 
 	k.CollectionNode = pn.
@@ -253,5 +254,6 @@ func (k *Kipapi) PrintItem(i *kip.Item, c *golax.Context) {
 
 	m := k.Map(i, c)
 
-	json.NewEncoder(c.Response).Encode(m)
+	k.Encode(m, c)
+
 }

@@ -53,9 +53,10 @@ func (w *World) Test_Filter(c *C) {
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusNoContent)
 
-	user := w.Users.FindById(id)
+	user, err := w.Users.FindById(id)
 	c.Assert(user.Value.(*User).Name, Equals, "·-{fulanito}-·")
 	c.Assert(user.Value.(*User).Email, Equals, "myemail@google.com")
+	c.Assert(err, IsNil)
 }
 
 func (w *World) Test_Filter_List(c *C) {

@@ -31,8 +31,9 @@ func (w *World) Test_Update_OK(c *C) {
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusNoContent)
 
-	user := w.Users.FindById(id)
+	user, err := w.Users.FindById(id)
 	c.Assert(user.Value.(*User).Name, Equals, "Fulanito")
+	c.Assert(err, IsNil)
 }
 
 func (w *World) Test_Update_BadRequest(c *C) {
@@ -81,8 +82,9 @@ func (w *World) Test_Update_HookPatch(c *C) {
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusNoContent)
 
-	user := w.Users.FindById(id)
+	user, err := w.Users.FindById(id)
 	c.Assert(user.Value.(*User).Name, Equals, "FULANITO")
+	c.Assert(err, IsNil)
 }
 
 func (w *World) Test_Update_BadPatch(c *C) {
@@ -154,7 +156,8 @@ func (w *World) Test_Update_HookPatchCombined(c *C) {
 	// Check
 	c.Assert(r.StatusCode, Equals, http.StatusNoContent)
 
-	user := w.Users.FindById(id)
+	user, err := w.Users.FindById(id)
 	c.Assert(user.Value.(*User).Name, Equals, "·-{fulanito}-·")
 	c.Assert(user.Value.(*User).Email, Equals, "myemail@google.com")
+	c.Assert(err, IsNil)
 }

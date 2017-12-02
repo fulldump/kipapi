@@ -25,6 +25,7 @@ func (w *World) Test_HookDelete(c *C) {
 	// Check
 	c.Assert(r.StatusCode, Equals, 999)
 
-	user := w.Users.FindById(id)
+	user, err := w.Users.FindById(id)
 	c.Assert(user, NotNil)
+	c.Assert(err, IsNil)
 }

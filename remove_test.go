@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	. "gopkg.in/check.v1"
-	mgo "gopkg.in/mgo.v2"
 )
 
 func (w *World) Test_Delete_OK(c *C) {
@@ -27,5 +26,5 @@ func (w *World) Test_Delete_OK(c *C) {
 	// Check db
 	user, err := w.Users.FindById(id)
 	c.Assert(user, IsNil)
-	c.Assert(err, DeepEquals, mgo.ErrNotFound)
+	c.Assert(err, IsNil)
 }

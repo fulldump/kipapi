@@ -9,7 +9,6 @@ import (
 
 	"github.com/fulldump/golax"
 	"github.com/fulldump/kip"
-	"gopkg.in/mgo.v2"
 )
 
 func newInterceptorItem(k *Kipapi) *golax.Interceptor {
@@ -42,14 +41,14 @@ func newInterceptorItem(k *Kipapi) *golax.Interceptor {
 
 			item, err := k.Dao.FindOne(d.Filter)
 
-			if mgo.ErrNotFound == err {
-				m := fmt.Sprintf("Item `%s` not found", id)
-				c.Error(http.StatusNotFound, m)
+			if err != nil {
+				c.Error(http.StatusInternalServerError, err.Error())
 				return
 			}
 
-			if err != nil {
-				c.Error(http.StatusInternalServerError, err.Error())
+			if nil == item {
+				m := fmt.Sprintf("Item `%s` not found", id)
+				c.Error(http.StatusNotFound, m)
 				return
 			}
 

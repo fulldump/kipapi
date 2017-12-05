@@ -32,7 +32,8 @@ func list(k *Kipapi) func(c *golax.Context) {
 		fields := c.Request.URL.Query().Get("fields")
 		f := strings.Split(fields+",_id", ",")
 
-		iter := k.Dao.Find(d.Filter).Iter()
+		iter, db := k.Dao.Find(d.Filter).Iter()
+		defer db.Close()
 
 		i := k.Dao.Create()
 		for iter.Next(i.Value) {

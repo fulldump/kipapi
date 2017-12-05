@@ -7,6 +7,11 @@
 <a href="https://godoc.org/github.com/fulldump/kipapi"><img src="https://godoc.org/github.com/fulldump/kipapi?status.svg" alt="GoDoc"></a>
 </p>
 
+<p align="center">
+    <sup>Tested Go versions 1.5, 1.6, 1.7, 1.8, 1.9</sup>
+</p>
+
+
 Kipapi is a CRUD HTTP API.
 
 
